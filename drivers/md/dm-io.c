@@ -304,6 +304,14 @@ static void do_region(int rw, unsigned region, struct dm_io_region *where,
 	 * where->count may be zero if rw holds a flush and we need to
 	 * send a zero-sized flush.
 	 */
+	if (rw & REQ_DISCARD) {
+		special_cmd_max_sectors = q->limits.max_discard_sectors;
+		if (special_cmd_max_sectors == 0) {
+			dec_count(io, region, -EOPNOTSUPP);
+			return;
+		}
+	}
+
 	do {
 		/*
 		 * Allocate a suitably sized-bio.
