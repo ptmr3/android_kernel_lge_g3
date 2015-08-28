@@ -673,14 +673,19 @@ static int dwc3_otg_set_power(struct usb_phy *phy, unsigned mA)
 #ifdef CONFIG_FORCE_FAST_CHARGE
 	/* Use Fast charge currents accroding to user settings */
 	/* DWC3_IDEV_CHG_MAX = 1500 / DWC3_IDEV_CHG_MIN = 500 */
-	if (force_fast_charge == FAST_CHARGE_FORCE_AC) {/* We are in basic Fast Charge mode, so we substitute AC to USB levels */
+	if (force_fast_charge == FAST_CHARGE_FORCE_AC) {/* We are using default values, which now include an increase in AC charge levels as well as USB */
 		switch(dotg->charger->chg_type) {
 			case DWC3_SDP_CHARGER:		// standard downstream port
 			case DWC3_CDP_CHARGER:		// charging downstream port
 							mA = USB_CHARGE_1000;      /* Apply usual 1A/h AC level fastcharge to USB */
 							current_charge_level = mA; /* Remember we are fast charging */
 							break;
-			default:			break; /* Don't do anything for any other kind of connections */
+			case DWC3_DCP_CHARGER:		// dedicated charging port
+			case DWC3_PROPRIETARY_CHARGER:	mA = AC_CHARGE_2000;      /* Bump the AC to 2A/h */
+							current_charge_level = mA; /* Remember we are fast charging */
+							break;
+			default:			/* Don't do anything for any other kind of connections */
+							break; 
 		}
 	} else if (force_fast_charge == FAST_CHARGE_FORCE_CUSTOM_MA) { /* We are in custom current Fast Charge mode for both AC and USB */
 		switch(dotg->charger->chg_type) {

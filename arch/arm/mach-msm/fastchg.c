@@ -124,7 +124,11 @@ static ssize_t ac_charge_level_store(struct kobject *kobj, struct kobj_attribute
 			case AC_CHARGE_1700:
 			case AC_CHARGE_1800:
 			case AC_CHARGE_1900:
-			case AC_CHARGE_2000:		ac_charge_level = new_ac_charge_level;
+			case AC_CHARGE_2000:
+			case AC_CHARGE_2100:
+			case AC_CHARGE_2200:
+			case AC_CHARGE_2300:
+			case AC_CHARGE_2400:		ac_charge_level = new_ac_charge_level;
 							return count;
 			default:			return -EINVAL;
 
@@ -170,7 +174,12 @@ static ssize_t usb_charge_level_store(struct kobject *kobj, struct kobj_attribut
 			case USB_CHARGE_700:
 			case USB_CHARGE_800:
 			case USB_CHARGE_900:
-			case USB_CHARGE_1000:		usb_charge_level = new_usb_charge_level;
+			case USB_CHARGE_1000:
+			case USB_CHARGE_1100:
+			case USB_CHARGE_1200:
+			case USB_CHARGE_1300:
+			case USB_CHARGE_1400:
+			case USB_CHARGE_1500:		usb_charge_level = new_usb_charge_level;
 							return count;
 			default:			return -EINVAL;
 		}
